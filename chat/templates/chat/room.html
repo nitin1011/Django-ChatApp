@@ -1,0 +1,553 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+
+<html>
+<head>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
+<style>
+
+.container{max-width:1170px; margin:auto;}
+img{ max-width:100%;}
+.inbox_people {
+  background: #f8f8f8 none repeat scroll 0 0;
+  float: left;
+  overflow: hidden;
+  width: 100%; border-right:1px solid #c4c4c4;
+}
+.inbox_msg {
+  border: 1px solid #c4c4c4;
+  clear: both;
+  overflow: hidden;
+}
+.top_spac{ margin: 20px 0 0;}
+
+
+.recent_heading {float: left; width:40%;}
+.srch_bar {
+  display: inline-block;
+  text-align: right;
+  width: 60%; padding:
+}
+.headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
+
+.recent_heading h4 {
+  color: #05728f;
+  font-size: 21px;
+  margin: auto;
+}
+.srch_bar input{ border:1px solid #cdcdcd; border-width:0 0 1px 0; width:80%; padding:2px 0 4px 6px; background:none;}
+.srch_bar .input-group-addon button {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: medium none;
+  padding: 0;
+  color: #707070;
+  font-size: 18px;
+}
+.srch_bar .input-group-addon { margin: 0 0 0 -27px;}
+
+.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
+.chat_ib h5 span{ font-size:13px; float:right;}
+.chat_ib p{ font-size:14px; color:#989898; margin:auto}
+.chat_img {
+  float: left;
+  width: 11%;
+}
+.chat_ib {
+  float: left;
+  padding: 0 0 0 15px;
+  width: 88%;
+}
+
+.chat_people{ overflow:hidden; clear:both;}
+.chat_list {
+  border-bottom: 1px solid #c4c4c4;
+  margin: 0;
+  padding: 18px 16px 10px;
+}
+.inbox_chat { height: 550px; overflow-y: scroll;}
+
+.active_chat{ background:#ebebeb;}
+
+.incoming_msg_img {
+  display: inline-block;
+  width: 6%;
+  padding-bottom: 10px;
+}
+.received_msg {
+  display: inline-block;
+  padding: 0 0 0 10px;
+  vertical-align: top;
+  width: 92%;
+ }
+ .received_withd_msg{
+  background: #ebebeb none repeat scroll 0 0;
+  border-radius: 3px;
+  color: #646464;
+  font-size: 14px;
+  margin: 0;
+  padding: 5px 10px 5px 12px;
+  width: 57%;
+  height: 10%;
+}
+.time_date {
+  color: white;
+  display: block;
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+
+.time_date_in {
+  color: black;
+  display: block;
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+
+.mesgs {
+  float: left;
+  padding: 30px 15px 0 25px;
+  width: 100%;
+}
+
+ .sent_msg {
+  background: #05728f none repeat scroll 0 0;
+  border-radius: 3px;
+  font-size: 14px;
+  margin: 0; color:#fff;
+  padding: 5px 10px 5px 12px;
+  width:100%;
+}
+.outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
+.sent_msg {
+  float: right;
+  width: 46%;
+}
+.input_msg_write input {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: medium none;
+  color: #4c4c4c;
+  font-size: 15px;
+  min-height: 48px;
+  width: 100%;
+}
+
+.type_msg {border-top: 1px solid #c4c4c4;position: relative;}
+.msg_send_btn {
+  background: #05728f none repeat scroll 0 0;
+  border: medium none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 17px;
+  height: 33px;
+  position: absolute;
+  right: 0;
+  top: 11px;
+  width: 33px;
+}
+.emoji_btn {
+  text-decoration: none;
+  background:none repeat scroll 0 0;
+  border: medium none;
+  
+}
+.messaging { padding: 0 0 50px 0;}
+.msg_history {
+  height: 516px;
+  overflow-y: auto;
+}
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+#emoji{
+  onclick:'emoji_insert()';
+}
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+</style>
+
+</head>
+<body style='onmouseover="changeStatus(true);"'>
+<div class="container">
+<div id="auto">
+  {% if isadmin %}
+  <a href="{% url 'add-user-list' room_name %}">Add User</a>
+  {% endif %}
+  <h4 id="receiver_name">{{ receiver.username }}</h4>
+  {% if isgroup %}
+  {{ room_name }}
+  {% else %}
+  {% if receiver.profile.is_online %}
+      <p id="action" style="color:green">Online</p>
+  {% else %}
+      <p id="action" style="color:green">last seen {{ receiver.profile.last_seen }}</p>
+  {% endif %}
+  {% endif %}
+</div>
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="emoji-box">
+
+    </div>
+        <div class="tab">
+          <button id="clicked-emoji" class="tablinks" onclick="emojiSelect(event, 'Smiley, grinning face')">&#128512;</button>
+          <button class="tablinks" onclick="emojiSelect(event, 'Boy')">&#128102;</button>
+          <button class="tablinks" onclick="emojiSelect(event, 'Monkey')">&#128018;</button>
+            <button class="tablinks" onclick="emojiSelect(event, 'Sun behind cloud')">&#9925;</button>
+            <button class="tablinks" onclick="emojiSelect(event, 'Shortcake')">&#127856;</button>
+            <button class="tablinks" onclick="emojiSelect(event, 'Person doing cartwheel')">&#129336;</button>
+            <button class="tablinks" onclick="emojiSelect(event, 'Classical building')">&#127963;</button>
+            <button class="tablinks" onclick="emojiSelect(event, 'Necktie')">&#128084;</button>
+            <button class="tablinks" onclick="emojiSelect(event, 'Thumbs up sign')">&#128077;</button>
+        </div>
+  </div>
+
+</div>
+<div class="messaging">
+      <div class="inbox_msg">
+        <div class="inbox_people">
+        <div class="mesgs">
+          <div id="msg_his" class="msg_history">
+        
+        {% for date, messages in msg.items %}
+        <div style="text-align:center; margin-bottom:15px;">
+        <div style="background-color:#e1f3fb; display:inline-block; border-radius: 10px; padding: 2px 7px 2px 7px">
+          {{ date }}
+          </div>
+        </div>
+        {% for message in messages %}
+            {% ifequal message.author.username user.username %}
+            <div class="outgoing_msg">
+              <div class="sent_msg">
+                <p class="h6">{{ message.content }}<span class="float-right">&#10003;</span><br/>
+                <span class="time_date float-right"> {{ message.timestamp.time }}</span>
+                </p>
+                 </div>
+            </div>
+            {% else %}
+            <div class="incoming_msg mb-3">
+              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                {% if isgroup %}
+                <p class="h6"><span class="text-success font-weight-bold">{{ message.author.username }}</span><p/>
+                  {{ message.content }}<br/><span class="time_date_in float-right">{{ message.timestamp.time }}</span></p>
+                {% else %}
+                <p class="h6">{{ message.content }}<br/><span class="time_date_in float-right">{{ message.timestamp.time }}</span></p>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endifequal %}
+        {% endfor %}
+        {% endfor %}
+          </div>
+          <div class="type_msg">
+            <div class="input_msg_write">
+            <input id="chat-user-input" type="hidden" size="100" value='{{ user.username }}'><br>
+              <input style="font-size:25px;" id="chat-message-input" type="text" class="write_msg" placeholder="Type a message" />
+              <button id="myBtn" style="text-decoration: none;background: none repeat scroll 0 0;
+  border: medium none;"><span style='font-size:25px;'>&#128528;</span>
+</button>
+              <button id="chat-message-submit" class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+{{ room_name|json_script:"room-name" }}
+    <script>
+    var objDiv = document.getElementById("msg_his");
+    objDiv.scrollTop = objDiv.scrollHeight;
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+        
+        var typingTimer;                //timer identifier
+          var doneTypingInterval = 1000;  //time in ms, 1 second for example
+          var $input = $('#chat-message-input');
+
+          //on keyup, start the countdown
+          $input.on('keyup', function () {
+            var action = document.getElementById('action');
+            const userInputDom = document.querySelector('#chat-user-input');
+            const user = userInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'inputtype' : '2',
+                'action': 'typing...',
+                'user': user
+            }));
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(doneTyping, doneTypingInterval);
+          });
+
+          //on keydown, clear the countdown 
+          $input.on('keydown', function () {
+            clearTimeout(typingTimer);
+          });
+
+          //user is "finished typing," do something
+          function doneTyping () {
+            const userInputDom = document.querySelector('#chat-user-input');
+            const user = userInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'inputtype' : '2',
+                'action': 'Online',
+                'user': user
+            }));
+          }
+        
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if(data.inputtype === '1')
+            {
+              var date = new Date();
+              var d = new Date().toLocaleString("en-US",{timeZone:"UTC"});
+              d = d.split(" ");
+              d[1] = d[1].split(":");
+              var date2 = d[1][0]+":"+d[1][1];
+              if(d[2] === "PM")
+              {
+                  date2 = date2.concat(" p.m.");
+              }
+              else
+              {
+                  date2 = date2.concat(" a.m.");
+              }
+              console.log(date2);
+              username = document.querySelector('#chat-user-input').value;
+              if(data.username === username)
+              {
+                var code = '<div class="outgoing_msg">'+
+                            '<div class="sent_msg">'+
+                            ' <p class="h6">'+ data.message +'<span class="float-right">&#10003;</span><br/>'+
+                            '<span class="time_date float-right">'+date2+'</span></p>'+
+                            '</div>';
+              }
+              else
+              {
+                var code = '<div class="incoming_msg mb-3">'+
+                  '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>'+
+                  '<div class="received_msg">'+
+                    '<div class="received_withd_msg">'+
+                    '{% if isgroup %}'+
+                    '<p class="h6"><span class="text-success font-weight-bold">'+data.username+'</span><p/>'+
+                      data.message+'<br/><span class="time_date_in float-right">'+date2+'</span></p>'+
+                    '{% else %}'+
+                    '<p class="h6">'+data.message+'<br/><span class="time_date_in float-right">'+date2+'</span></p>'+
+                    '{% endif %}</div></div></div>'
+              }
+
+                document.getElementById("msg_his").innerHTML += code;
+                var objDiv = document.getElementById("msg_his");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }
+            else if(data.inputtype === '2')
+            {
+              const userInputDom = document.querySelector('#chat-user-input');
+              const user = userInputDom.value;
+              if(data.username !== user)
+              {
+                var action_p = document.getElementById("action");
+                action_p.innerHTML = data.action;
+              }
+            }
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+        
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            const userInputDom = document.querySelector('#chat-user-input');
+            const user = userInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'inputtype': '1',
+                'message': message,
+                'user': user
+            }));
+            messageInputDom.value = '';
+        };
+        document.getElementById("clicked-emoji").click();
+        function emojiSelect(event, emoji_name)
+        {
+            var emoji_box = document.getElementById("emoji-box");
+            if(emoji_name === "Smiley, grinning face")
+            {
+              var em = "😀😁😂🤣😃😄😅😆😉😊😋😎😍😘😗😙😚🙂🤗🤩🤔🤨😐😑😶🙄😏😣😥😮🤐😯😪😫😴😌😛😜😝🤤😒😓😔😕🙃🤑😲🙁😖😞😟😤😢😭😦😧😨😩🤯😬😰😱😳🤪😵😡😠🤬😷🤒🤕🤢🤮🤧😇🤠🤡🤥🤫🤭🧐🤓😈👿👹👺💀👻👽🤖💩";
+            }
+            if(emoji_name === "Boy")
+            {
+              var em = "👦👶👧👨👩👴👵👾👮🕵💂👷🤴👸👳👲🧕🧔👱🤵👰🤰🤱👼🎅🤶🙍🙎🙅🙆💁🙋🙇🤦🤷💆💇🚶🏃💃🕺👯🕴🗣👤👥👫👬👭💏💑👪";
+            }
+            if(emoji_name === "Monkey")
+            {
+              var em = "😺😸😹😻😼😽🙀😿😾🙈🙉🙊💥🐵🐒🦍🐶🐕🐩🐺🦊🐱🐈🦁🐯🐅🐆🐴🐎🦄🦓🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑🐐🐪🐫🦒🐘🦏🐭🐁🐀🐹🐰🐇🐿🦔🦇🐻🐨🐼🐾🦃🐔🐓🐣🐤🐥🐦🐧🕊🦅🦆🦉🐸🐊🐢🦎🐍🐲🐉🦕🦖🐳🐋🐬🐟🐠🐡🦈🐙🐚🦀🦐🦑🐌🦋🐛🐜🐝🐞🦗🕷🕸🦂🦠🦟🦘🦙🦚🦛🦜🦝🦞🦡🦢";
+            }
+            if(emoji_name === "Sun behind cloud")
+            {
+              var em = "🌍🌎🌏🌐🌑🌒🌓🌔🌕🌖🌗🌘🌙🌚🌛🌜☀🌝🌞⭐🌟🌠☁⛅⛈🌤🌥🌦🌧🌨🌩🌪🌫🌬🌈☔⚡❄☃⛄☄🔥💧🌊🎄✨🎋🎍";
+            }
+            if(emoji_name === "Shortcake")
+            {
+              var em = "🧀🥚🍳🥞🍞🥐🥯🥖🥨🍔🍟🌭🍕🥪🌮🌯🥙🍝🍛🥘🍲🍤🥗🥫🥓🍖🍗🥩🥢🥡🥟🍚🍜🥠🥮🍘🍙🍣🍥🍱🍡🍢🍇🍑🍒🍓🥝🍉🍈🍊🍋🍌🍍🥭🥥🍎🍏🌽🍐🥬🥦🍄🍅🥕🌶🍆🥒🥑🥔🍠🥜🍰🎂🧁🥧🍩🍪🍿🍮🍯🍦🍨🍧🍫🍬🍭🍺🍻🥂🍷🍸🍹🍶🥃🍾☕🍵🥛🍼🥤🍴🍽🥣🥄🧂";
+            }
+            if(emoji_name === "Person doing cartwheel")
+            {
+              var em = "🏇⛷🏂🏌🏄🚣🏊⛹🏋🚴🚵🤸🤼🤽🤾🤹🎪🎗🎟🎫🎖🏆🏅🥇🥈🥉⚽⚾🏀🏐🏈🏉🎾🎳🏏🏑🏒🏓🏸🥊🥋⛳⛸🎣🎽🎿🛷🥌🎯🎱🎮🎰🎲🎭🎨🎼🎤🎧🎷🎸🎹🎺🎻🥁🎬🏹";
+            }
+            if(emoji_name === "Classical building")
+            {
+              var em = "🏎🏍🗾🏔⛰🌋🗻🏕🏜🏝🏞🏟🏛🏗🏘🏚🏠🏡🏢🏣🏤🏥🏦🏨🏩🏪🏫🏬🏭🏯🏰💒🗼🗽⛪🕌🕍⛩🕋⛲⛺🌁🌃🏙🌄🌅🌆🌇🌉🌌🎠🎡🎢🚂🚃🚄🚅🚆🚇🚈🚉🚊🚝🚞🚋🚌🚍🚎🚐🚑🚒🚓🚔🚕🚖🚗🚘🚚🚛🚜🚲🛴🛵🚏🛤⛽🚨⛵🚤🛳⛴🛥🚢✈🛩🛫🛬💺🚁🚟🚠🚡🛰🚀🛸⛱🎆🎇🎑🗿🛂🛃🛄🛅";
+            }
+            if(emoji_name === "Necktie")
+            {
+              var em = "💎👓🕶👔👕👖🧣🧤🧥🧦👗👘👙👚👛👜👝🎒👞👟👠👡👢👑👒🎩🎓🧢⛑💄💍🌂☂💼☠🛀🛌💌💣🚥🚦🚧⚓🕳🛍📿🔪🏺🗺💈🛢🛎⌛⏳⌚⏰⏱⏲🕰🌡🎈🎉🎊🎎🎏🎐🎀🎁🔮🕹🖼🎙🎚🎛📻📱📲☎📞📟📠🔋🔌💻🖥🖨⌨🖱🖲💽💾💿📀🎥🎞📽📺📷📸📹📼🔍🔎🕯💡🔦🏮📔📕📖📗📘📙📚📓📃📜📄📰🗞📑🔖🏷💰💸💳✉📧📨📩📤📥📦📫📪📬📭📮🗳✏✎🖉✒🖋🖊🖌🖍📝📁📂🗂📅📆🗒🗓📇📈📉📊📋📌📍📎🖇📏📐✂🗃🗄🗑🔒🔓🔏🔐🔑🗝🔨⛏⚒🛠🗡⚔🔫🛡🔧🔩⚙🗜⚖🔗⛓⚗🔬🔭📡💉💊🚪🛏🛋🚽🚿🛁🚬⚰⚱💘❤💓💔💕💖💗💙💚💛🧡💜🖤💝💞💟❣💦💨💫🏁🚩🎌🏴🏳";
+            }
+            if(emoji_name === "Thumbs up sign")
+            {
+              var em = "👍👎💪🤳👈👉☝👆🖕👇✌🤞🖖🤘🖐✋👌✊👊🤛🤜🤚👋🤟✍👏👐🙌🤲🙏🤝💅👂👃⚕️👣👀👁🧠👅👄💋👁🗨️💤💢💬🗯💭♨🛑🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕡🕖🕢🕗🕣🕘🕤🕙🕥🕚🕦🌀🃏🀄🎴🔇🔈🔉🔊📢📣📯🔔🔕🎵🎶🏧🚮🚰♿🚹🚺🚻🚼🚾⚠🚸⛔🚫🚳🚭🚯🚱🚷🔞☢☣🛐⚛🕉✡☸☯✝☦☪☮🕎🔯♈♉♊♋♌♍♎♏♐♑♒♓⛎🔀🔁🔂▶⏩◀⏪🔼⏫🔽⏬⏹⏏🎦🔅🔆📶📳📴♻🔱📛🔰⭕✅☑✔✖❌❎➕➖➗➰➿〽✳✴❇‼⁉❓❔❕❗💯🔠🔡🔢🔣🔤🅰🆎🅱🆑🆒🆓ℹ🆔Ⓜ🆕🆖🅾🆗🅿🆘🆙🆚🈁🈂🈷🈶🈯🉐🈹🈚🈲🉑🈸🈴🈳㊗㊙🈺🈵▪▫◻◼◽◾⬛⬜🔶🔷🔸🔹🔺🔻💠🔲🔳⚪⚫🔴🔵☎☏☐☑☒☓☔☕☖☗☘☙☚☛☜☝☞☟☠☡☢☣☤☥☦☧☨☩☪☫☬☭☮☯☸☹☺☻☼☽☾☿♀♁♂♃♄♅♆♇♔♕♖♗♘♙♚♛♜♝♞♟♠♡♢♣♤♥♦♧♨♩♪♫♬♭♮♯♰♱♲♳♴♵♶♷♸♹♺♻♼♽♾♿⚀⚁⚂⚃⚄⚅⚆⚇⚈⚉⚊⚋⚌⚍⚎⚏⚐⚑⚓⚔⚕⚖⚗⚘⚙⚚⚛⚜⚝⚞⚟⚠⚡⚢⚣⚤⚥⚦⚧⚨⚩⚪⚫⚽⚾⚿⛀⛁⛂⛃⛄⛅⛆⛇⛈⛉⛊⛋⛌⛍⛎⛏⛐⛑⛒⛓⛔⛕⛖⛗⛘⛙⛚⛛⛜⛝⛞⛟⛠⛡⛢⛣⛤⛥⛦⛧⛨⛩⛪⛫⛬⛭⛮⛯⛰⛱⛲⛳⛴⛵⛶⛷⛸⛹⛺⛻⛼⛽⛾⛿✁✂✃✄✅✆✇✈✉✊✋✌✍✎✏✐✑✒✓✔✕✖✗✘✙✚✛✜✝✞✟✠✡✢✣✤✥✦✧✨✩✪✫✬✭✮✯✰✱✲✳✴✵✶✷✸✹✺✻✼✽✾✿❀❁❂❃❄❅❆❇❈❉❊❋❌❎❓❔❕❖❗➔➕➖➗➤➥➦➧➨➩➪➫➬➭➮➯➰➱➲➼➽➾➿⬆🔃🔄🔙🔚🔛🔜🔝➤💴💵💶💷";
+            }
+            var text = "";
+            for (var i = 0; i < em.length; i++) {
+              var eji = String.fromCodePoint(em.codePointAt(i));
+              if(em.codePointAt(i).toString().substring(0,1) !== "5")
+              {
+              text += "<button id='emoji' onclick='emoji_function(this)' class='emoji_btn' value='"+eji+"'>"+eji+"</button>";
+              }
+            }
+            emoji_box.innerHTML = text;
+        }
+
+        var modal = document.getElementById("myModal");
+        function emoji_function(elem)
+        {
+            var text = elem.value;
+            var input_chat = document.getElementById("chat-message-input");
+            input_chat.value += text;
+        }
+// Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+        
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+        
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+        setTimeout(onlineuser, 1000);
+        function onlineuser()
+        {
+          const userInputDom = document.querySelector('#chat-user-input');
+          const user = userInputDom.value;
+          chatSocket.send(JSON.stringify({
+                  'inputtype': '3',
+                  'action': 'online',
+                  'user': user
+            }));
+        }
+        window.onbeforeunload = exitPage;
+        function exitPage()
+        {
+            const userInputDom = document.querySelector('#chat-user-input');
+            const user = userInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'inputtype': '3',
+                'action': 'offline',
+                'user': user
+            }));
+        }
+
+    </script>
+</body>
+</html>
