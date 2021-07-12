@@ -90,7 +90,6 @@ img{ max-width:100%;}
   margin: 0;
   padding: 5px 10px 5px 12px;
   width: 57%;
-  height: 10%;
 }
 .time_date {
   color: white;
@@ -229,11 +228,13 @@ img{ max-width:100%;}
 <div class="container">
 <div id="auto">
   {% if isadmin %}
-  <a href="{% url 'add-user-list' room_name %}">Add User</a>
+  <a href="{% url 'add-user-list' room_name %}" style="margin-right: 10px">Add User</a>
+  
   {% endif %}
   <h4 id="receiver_name">{{ receiver.username }}</h4>
   {% if isgroup %}
-  {{ room_name }}
+  <a href="{% url 'group-member-list' room_name %}" style="margin-right: 10px">Group Members</a><br/>
+  <h3>{{ room_name }}</h3>
   {% else %}
   {% if receiver.profile.is_online %}
       <p id="action" style="color:green">Online</p>
@@ -277,6 +278,31 @@ img{ max-width:100%;}
           </div>
         </div>
         {% for message in messages %}
+          {% ifequal message.content_type 'image' %}
+            {% ifequal message.author.username user.username %}
+            <div class="outgoing_msg">
+              <div class="sent_msg">
+                <p class="h6"><img width="350px" height="300px" src="{{ message.img_content.url }}"><span class="float-right">&#10003;</span><br/>
+                <span class="time_date float-right"> {{ message.timestamp.time }}</span>
+                </p>
+                 </div>
+            </div>
+            {% else %}
+            <div class="incoming_msg mb-3">
+              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                {% if isgroup %}
+                <p class="h6"><span class="text-success font-weight-bold">{{ message.author.username }}</span><p/>
+                  <span class="float-left"><img src="{{ message.img_content.url }}"></span><span class="time_date_in float-right">{{ message.timestamp.time }}</span></p>
+                {% else %}
+                <p class="h6"><img src="{{ message.img_content.url }}"><br/><span class="time_date_in float-right">{{ message.timestamp.time }}</span></p>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endifequal %}
+          {% else %}
             {% ifequal message.author.username user.username %}
             <div class="outgoing_msg">
               <div class="sent_msg">
@@ -292,7 +318,7 @@ img{ max-width:100%;}
                 <div class="received_withd_msg">
                 {% if isgroup %}
                 <p class="h6"><span class="text-success font-weight-bold">{{ message.author.username }}</span><p/>
-                  {{ message.content }}<br/><span class="time_date_in float-right">{{ message.timestamp.time }}</span></p>
+                  <span class="float-left">{{ message.content }}</span><span class="time_date_in float-right">{{ message.timestamp.time }}</span></p>
                 {% else %}
                 <p class="h6">{{ message.content }}<br/><span class="time_date_in float-right">{{ message.timestamp.time }}</span></p>
                 {% endif %}
@@ -300,6 +326,7 @@ img{ max-width:100%;}
               </div>
             </div>
             {% endifequal %}
+          {% endifequal %}
         {% endfor %}
         {% endfor %}
           </div>
@@ -307,6 +334,7 @@ img{ max-width:100%;}
             <div class="input_msg_write">
             <input id="chat-user-input" type="hidden" size="100" value='{{ user.username }}'><br>
               <input style="font-size:25px;" id="chat-message-input" type="text" class="write_msg" placeholder="Type a message" />
+              <input type="file" id="chat_img" name="img" accept="image/*">
               <button id="myBtn" style="text-decoration: none;background: none repeat scroll 0 0;
   border: medium none;"><span style='font-size:25px;'>&#128528;</span>
 </button>
@@ -384,27 +412,54 @@ img{ max-width:100%;}
               }
               console.log(date2);
               username = document.querySelector('#chat-user-input').value;
-              if(data.username === username)
+              if(data.content_type == 'text')
               {
-                var code = '<div class="outgoing_msg">'+
-                            '<div class="sent_msg">'+
-                            ' <p class="h6">'+ data.message +'<span class="float-right">&#10003;</span><br/>'+
-                            '<span class="time_date float-right">'+date2+'</span></p>'+
-                            '</div>';
-              }
-              else
-              {
-                var code = '<div class="incoming_msg mb-3">'+
-                  '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>'+
-                  '<div class="received_msg">'+
-                    '<div class="received_withd_msg">'+
-                    '{% if isgroup %}'+
-                    '<p class="h6"><span class="text-success font-weight-bold">'+data.username+'</span><p/>'+
-                      data.message+'<br/><span class="time_date_in float-right">'+date2+'</span></p>'+
-                    '{% else %}'+
-                    '<p class="h6">'+data.message+'<br/><span class="time_date_in float-right">'+date2+'</span></p>'+
-                    '{% endif %}</div></div></div>'
-              }
+                if(data.username === username)
+                {
+                  var code = '<div class="outgoing_msg">'+
+                              '<div class="sent_msg">'+
+                              ' <p class="h6">'+ data.message +'<span class="float-right">&#10003;</span><br/>'+
+                              '<span class="time_date float-right">'+date2+'</span></p>'+
+                              '</div>';
+                }
+                else
+                {
+                  var code = '<div class="incoming_msg mb-3">'+
+                    '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>'+
+                    '<div class="received_msg">'+
+                      '<div class="received_withd_msg">'+
+                      '{% if isgroup %}'+
+                      '<p class="h6"><span class="text-success font-weight-bold">'+data.username+'</span><p/>'+
+                        data.message+'<br/><span class="time_date_in float-right">'+date2+'</span></p>'+
+                      '{% else %}'+
+                      '<p class="h6">'+data.message+'<br/><span class="time_date_in float-right">'+date2+'</span></p>'+
+                      '{% endif %}</div></div></div>'
+                }
+            }
+                else if(data.content_type == 'image')
+                {
+                  if(data.username === username)
+                  {
+                    var code = '<div class="outgoing_msg">'+
+                                '<div class="sent_msg">'+
+                                ' <p class="h6">'+'<img src="'+data.message.url+'">'+'<span class="float-right">&#10003;</span><br/>'+
+                                '<span class="time_date float-right">'+date2+'</span></p>'+
+                                '</div></div>';
+                  }
+                  else
+                  {
+                    var code = '<div class="incoming_msg mb-3">'+
+                      '<div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>'+
+                      '<div class="received_msg">'+
+                        '<div class="received_withd_msg">'+
+                        '{% if isgroup %}'+
+                        '<p class="h6"><span class="text-success font-weight-bold">'+data.username+'</span><p/>'+
+                          '<img src="'+data.message.url+'">'+'<br/><span class="time_date_in float-right">'+date2+'</span></p>'+
+                        '{% else %}'+
+                        '<p class="h6">'+data.message.url+'<br/><span class="time_date_in float-right">'+date2+'</span></p>'+
+                        '{% endif %}</div></div></div>'
+                  }
+                }
 
                 document.getElementById("msg_his").innerHTML += code;
                 var objDiv = document.getElementById("msg_his");
@@ -435,15 +490,54 @@ img{ max-width:100%;}
         
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
+            const img = document.querySelector('#chat_img').files[0];
             const message = messageInputDom.value;
             const userInputDom = document.querySelector('#chat-user-input');
             const user = userInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'inputtype': '1',
-                'message': message,
-                'user': user
-            }));
-            messageInputDom.value = '';
+            if(message === '')
+            {
+              var data = {
+                'img': img,
+                'user': user,
+                'room_name': roomName,
+              }
+              function getCookie(c_name) {
+        if(document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if(c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if(c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+              $.ajax({
+                url: '{% url "img-save" %}',
+                headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+                  },
+                type: 'post',
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function(response)
+                {
+                  alert("saved");
+                }
+              });
+            }
+            else
+            {
+              chatSocket.send(JSON.stringify({
+                  'inputtype': '1',
+                  'message': message,
+                  'type': 'text',
+                  'user': user
+              }));
+              messageInputDom.value = '';
+            }
         };
         document.getElementById("clicked-emoji").click();
         function emojiSelect(event, emoji_name)

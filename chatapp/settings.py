@@ -130,6 +130,8 @@ USE_TZ = True
 LOGIN_REDIRECT_URL = 'user-list'
 LOGIN_URL = 'login'
 STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]

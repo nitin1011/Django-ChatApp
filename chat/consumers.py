@@ -32,12 +32,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         input_type = text_data_json['inputtype']
         if input_type == '1':
-            message = text_data_json['message']
+            content_type = text_data_json['type']
+            if content_type == 'image':
+                message = text_data_json['message']
+            else:
+                message = text_data_json['message']
             username = text_data_json['user']
 
             user = User.objects.get(username=username)
             date = datetime.now()
-            new_message = Message.objects.create(author=user, content=message, roomname=self.room_name, timestamp=date)
+            if content_type == 'image':
+                new_message = Message.objects.create(author=user, img_content=message, content_type=content_type, roomname=self.room_name, timestamp=date)
+            else:
+                new_message = Message.objects.create(author=user, content=message, content_type=content_type, roomname=self.room_name, timestamp=date)
 
             new_message.save()
             timestamp = new_message.timestamp
@@ -47,6 +54,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'chat_message',
+                    'content_type': content_type,
                     'message': message,
                     'username': username,
                 }
@@ -94,11 +102,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event['message']
         username = event['username']
+        content_type = event['content_type']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'inputtype': '1',
             'message': message,
             'username': username,
+            'content_type': content_type
         }))
 
     async def action_message(self, event):

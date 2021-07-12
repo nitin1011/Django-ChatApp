@@ -68,6 +68,8 @@ def room_create(request, pk):
     return redirect('room', roomname)
 
 
+
+
 def index(request):
     return render(request, 'chat/index.html')
 
@@ -135,6 +137,8 @@ def logout(request):
 def create_group(request):
     if request.method == 'POST':
         group_name = request.POST['groupname']
+        if Group.objects.filter(gname=group_name).exists():
+            return redirect('user-list')
         group = Group.objects.create(gname = group_name, admin=request.user)
         group.save()
         group_member = GroupMember.objects.create(group=group, member=request.user)
@@ -154,9 +158,45 @@ def add_user_list(request, gname):
 
 
 @login_required(login_url='/chat/login/')
+def group_member_list(request, gname):
+    group_memeber = GroupMember.objects.all()
+    members = []
+    for member in group_memeber:
+        if member.group.gname == gname:
+            members.append(member.member)
+    group = Group.objects.get(gname=gname)
+    if group.admin == request.user:
+        isadmin = True
+    else:
+        isadmin = False
+    return render(request, 'chat/user_list.html', {'group_member': members, 'groups': [], 'gname':gname, 'isadmin': isadmin})
+
+
+@login_required(login_url='/chat/login/')
 def add_user(request, pk, gname):
     user = User.objects.get(pk=pk)
     group = Group.objects.get(gname=gname)
+    if GroupMember.objects.filter(group=group, member=user).exists():
+        return redirect('room', gname)
     groupmember = GroupMember.objects.create(group=group, member=user)
     groupmember.save()
     return redirect('room', gname)
+
+
+def remove_user_group(request, pk, gname):
+    user = User.objects.get(id=pk)
+    group_member = GroupMember.objects.get(member=user)
+    group_member.delete()
+    return redirect('group-member-list', gname)
+
+
+def img_message_save(request):
+    print("dkhfioehf")
+    if request.method == 'POST':
+        img = request.FILES['img']
+        user = request.POST['user']
+        room_name = request.POST['room_name']
+        print("image", img)
+        print("user",user)
+        print("Room name ",room_name)
+        return JsonResponse({'success': 'image save'})

@@ -13,7 +13,9 @@ class Profile(models.Model):
 class Message(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     roomname = models.CharField(max_length=100, default='')
-    content = models.TextField()
+    content = models.TextField(blank=True, null=True)
+    content_type = models.CharField(max_length=10, default='text')
+    img_content = models.ImageField(upload_to='image_message',blank=True, null=True)
     timestamp = models.DateTimeField()
 
     def __str__(self):
